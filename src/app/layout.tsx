@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ClerkProvider } from "@clerk/nextjs";
+import { PosHoProvider } from "./providers";
+import dynamic from "next/dynamic";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -12,6 +14,10 @@ const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+});
+
+const PostHogPageView = dynamic(() => import("./PostHogPageView"), {
+  ssr: false,
 });
 
 export const metadata: Metadata = {
@@ -26,16 +32,19 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <head>
-          {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async /> */}
-        </head>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          {children}
-        </body>
-      </html>
+      <PosHoProvider>
+        <html lang="en">
+          <head>
+            {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async /> */}
+          </head>
+          <PostHogPageView />
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            {children}
+          </body>
+        </html>
+      </PosHoProvider>
     </ClerkProvider>
   );
 }
