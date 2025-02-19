@@ -14,7 +14,7 @@ import {
 } from "../ui/alert-dialog";
 import { useState, ChangeEvent } from "react";
 import { QUESTIONS } from "@/data/newsletter/newsletter";
-import { NewsletterType } from "@/types/newsletter";
+import { NewsletterMetadata, NewsletterType } from "@/types/newsletter";
 import { HTMLInputs } from "@/types/inputs";
 import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { Button } from "../ui/button";
@@ -25,25 +25,26 @@ const NewsletterDashboard = () => {
     visible: false,
   });
 
-  const [newsletter, setNewsletter] = useState<NewsletterType>({
-    to: "",
-    subject: "",
-    preview: "",
-    body: "",
-  });
+  const [newsletter, setNewsletter] = useState<NewsletterMetadata[]>(MOCK);
   const handleChange = (e: ChangeEvent<HTMLInputs>, key: string) => {
     setNewsletter({ ...newsletter, [key]: e.target.value });
   };
 
   const handleConfigure = () => {
-    console.log(popup);
+    setPopup({
+      ...popup,
+      visible: true,
+    });
+  };
+
+  const handleAdd = () => {
     setPopup({
       ...popup,
       visible: true,
     });
   };
   return (
-    <div className="flex flex-col w-10/12 m-10 gap-4">
+    <div className="flex flex-col w-11/12 m-10 gap-4">
       <Label className="font-extrabold text-3xl">Newsletter</Label>
       <div className="flex flex-row items-center gap-2">
         <Button className="bg-ttickles-blue text-white font-bold hover:bg-ttickles-blue">
@@ -57,15 +58,15 @@ const NewsletterDashboard = () => {
         </Button>
         <Input placeholder="search" />
         <Select />
-        <Plus size={48} className="cursor-pointer" />
+        <Plus size={48} className="cursor-pointer" onClick={handleAdd} />
         <Trash size={48} className="cursor-pointer" />
       </div>
       <div className="grid grid-cols-3 gap-4">
-        {MOCK.map((item, index) => (
+        {newsletter.map((item, index) => (
           <NewsletterCard
             key={index}
             status={item.status}
-            title={item.title}
+            title={item.subject}
             date={item.date}
             id={2}
             handleConfigure={handleConfigure}

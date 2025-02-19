@@ -1,3 +1,5 @@
+import { NewsletterMetadata } from "@/types/newsletter";
+
 export const QUESTIONS = [
   {
     title: "To",
@@ -13,19 +15,19 @@ export const QUESTIONS = [
   },
 ];
 
-export const MOCK = [
+export const MOCK: NewsletterMetadata[] = [
   {
-    title: "Giving Guide 2025",
+    subject: "Giving Guide 2025",
     date: new Date(),
     status: "approve",
   },
   {
-    title: "Interview with Enya Umanzor",
+    subject: "Interview with Enya Umanzor",
     date: new Date(),
     status: "approve",
   },
   {
-    title: "Giving Back with Phillips Foundation",
+    subject: "Giving Back with Phillips Foundation",
     date: new Date(),
     status: "done",
   },

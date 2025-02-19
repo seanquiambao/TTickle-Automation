@@ -1,6 +1,11 @@
-export type NewsletterType = {
-  to: string;
+export type NewsletterMetadata = {
   subject: string;
-  preview: string;
-  body: string;
+  status: string;
+  date: Date;
 };
+
+export type NewsletterContent = {
+  body: string;
+  to: string;
+};
+export type NewsletterType = NewsletterMetadata & NewsletterContent;
