@@ -18,6 +18,7 @@ import { NewsletterType } from "@/types/newsletter";
 import { HTMLInputs } from "@/types/inputs";
 import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { Button } from "../ui/button";
+import { MOCK } from "@/data/newsletter/newsletter";
 
 const NewsletterDashboard = () => {
   const [popup, setPopup] = useState({
@@ -51,19 +52,25 @@ const NewsletterDashboard = () => {
         <Button className="bg-ttickles-orange text-white font-bold hover:bg-ttickles-orange">
           revise
         </Button>
+        <Button className="bg-ttickles-lightblue text-white font-bold hover:bg-ttickles-lightblue">
+          done
+        </Button>
         <Input placeholder="search" />
         <Select />
         <Plus size={48} className="cursor-pointer" />
         <Trash size={48} className="cursor-pointer" />
       </div>
-      <div className="grid grid-cols-3">
-        <NewsletterCard
-          status="approve"
-          title="Giving Guide 2024"
-          date={new Date()}
-          id={2}
-          handleConfigure={handleConfigure}
-        />
+      <div className="grid grid-cols-3 gap-4">
+        {MOCK.map((item, index) => (
+          <NewsletterCard
+            key={index}
+            status={item.status}
+            title={item.title}
+            date={item.date}
+            id={2}
+            handleConfigure={handleConfigure}
+          />
+        ))}
       </div>
 
       <AlertDialog open={popup.visible}>

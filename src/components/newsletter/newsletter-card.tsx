@@ -13,6 +13,7 @@ type props = {
 const COLORS: Record<string, string> = {
   revise: "bg-ttickles-orange",
   approve: "bg-ttickles-blue",
+  done: "bg-ttickles-lightblue",
 };
 const NewsletterCard = ({
   title,
@@ -47,7 +48,7 @@ const NewsletterCard = ({
           <div
             className={`${COLORS[status]} w-fit rounded-md text-white font-bold px-4 py-2 text-sm`}
           >
-            {status + "d"}
+            {status}
           </div>
         </div>
       </div>
