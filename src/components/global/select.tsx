@@ -10,12 +10,13 @@ import {
 const Select = () => {
   return (
     <SelectShadCN>
-      <SelectTrigger>
+      <SelectTrigger className="border-black/20 placedholder:text-black/20">
         <SelectValue placeholder="filter" />
       </SelectTrigger>
-      <SelectContent className="bg-white">
+      <SelectContent className="bg-white border-black/20">
         <SelectGroup>
-          <SelectItem value="apple">Apple</SelectItem>
+          <SelectItem value="subject">subject</SelectItem>
+          <SelectItem value="date">date</SelectItem>
         </SelectGroup>
       </SelectContent>
     </SelectShadCN>

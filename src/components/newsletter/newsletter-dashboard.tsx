@@ -45,6 +45,12 @@ const NewsletterDashboard = () => {
     <div className="flex flex-col w-10/12 m-10 gap-4">
       <Label className="font-extrabold text-3xl">Newsletter</Label>
       <div className="flex flex-row items-center gap-2">
+        <Button className="bg-ttickles-blue text-white font-bold hover:bg-ttickles-blue">
+          approve
+        </Button>
+        <Button className="bg-ttickles-orange text-white font-bold hover:bg-ttickles-orange">
+          revise
+        </Button>
         <Input placeholder="search" />
         <Select />
         <Plus size={48} className="cursor-pointer" />
@@ -52,6 +58,7 @@ const NewsletterDashboard = () => {
       </div>
       <div className="grid grid-cols-3">
         <NewsletterCard
+          status="approve"
           title="Giving Guide 2024"
           id={2}
           handleConfigure={handleConfigure}

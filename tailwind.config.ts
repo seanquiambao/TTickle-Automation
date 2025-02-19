@@ -15,6 +15,7 @@ export default {
           darkblue: "#036C76",
           lightblue: "#83c5be",
           white: "#edf6f9",
+          orange: "#ff9f1c",
           gray: "#7e8287",
         },
         background: "var(--background)",
