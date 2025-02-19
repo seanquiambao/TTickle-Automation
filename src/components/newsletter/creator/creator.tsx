@@ -163,7 +163,7 @@ const TypingEffect = ({
 }) => {
   const [index, setIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
-  const prevMessage = useMemo(() => message, []);
+  const prevMessage = useMemo(() => message, [message]);
 
   useEffect(() => {
     if (message !== prevMessage) {
