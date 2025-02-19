@@ -60,6 +60,7 @@ const NewsletterDashboard = () => {
         <NewsletterCard
           status="approve"
           title="Giving Guide 2024"
+          date={new Date()}
           id={2}
           handleConfigure={handleConfigure}
         />
