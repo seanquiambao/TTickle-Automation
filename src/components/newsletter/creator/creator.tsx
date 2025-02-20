@@ -2,11 +2,15 @@
 
 // import { useState, useMemo, useEffect } from "react";
 // import { Textarea } from "@/components/ui/textarea";
-import { EventType } from "@/types/event";
+// import { EventType } from "@/types/event";
 import Events from "./events";
 import { PlateEditor } from "@/components/editor/plate-editor";
+import { EventsProvider } from "./context";
 
 const Creator = () => {
+  // const { EventsContext } = useEventContext()
+  // const [events, setEvents] = useState(EventsContext)
+  // console.log("context: ", events)
   // const [message, setMessage] = useState("");
   // const [prompt, setPrompt] = useState("");
   // const [selectedPrompt, setSelectedPrompt] = useState("");
@@ -72,10 +76,11 @@ const Creator = () => {
   //   }
   // };
 
-  const handleEventsChange = (updatedEvents: EventType[]) => {
-    console.log("Updated Events List in Parent:", updatedEvents);
-    // setEvents(updatedEvents);
-  };
+  // const handleEventsChange = (updatedEvents: EventType[]) => {
+  //   console.log("Updated Events List in Parent:", updatedEvents);
+  //   // setEvents(updatedEvents);
+  //   // setEvents(updatedEvents)
+  // };
 
   // if (error) {
   //   console.log("Failed");
@@ -83,24 +88,25 @@ const Creator = () => {
   // }
 
   return (
-    <div className="flex flex-col gap-4 h-full w-full">
-      <div className="font-extrabold text-3xl mb-8">Newsletter</div>
-      <div className="flex flex-row h-full gap-2 w-2/3 ">
-        <div
-          // onMouseUp={() =>
-          //   setSelectedText(window.getSelection()?.toString().trim() || "")
-          // }
-          className="flex flex-col bg-black/5 p-4 rounded-md border border-black/20 w-full gap-4 h-full"
-        >
-          {/* <Textarea
+    <EventsProvider>
+      <div className="flex flex-col gap-4 h-full w-full">
+        <div className="font-extrabold text-3xl mb-8">Newsletter</div>
+        <div className="flex flex-row h-full gap-2 w-2/3 ">
+          <div
+            // onMouseUp={() =>
+            //   setSelectedText(window.getSelection()?.toString().trim() || "")
+            // }
+            className="flex flex-col bg-black/5 p-4 rounded-md border border-black/20 w-full gap-4 h-full"
+          >
+            {/* <Textarea
             value={displayedMessage}
             onChange={(e) => setMessage(e.target.value)}
             className="resize-none border-black/20 bg-white h-full"
           /> */}
-          {/* <TypingEffect message={message} setMessage={setMessage} /> */}
+            {/* <TypingEffect message={message} setMessage={setMessage} /> */}
 
-          <PlateEditor />
-          {/* <Prompt text={prompt} />
+            <PlateEditor />
+            {/* <Prompt text={prompt} />
           <div className="relative">
             <Input
               placeholder="write your prompt here"
@@ -118,10 +124,10 @@ const Creator = () => {
               {loading ? <Loader className="animate-spin" /> : <Search />}
             </Button>
           </div> */}
+          </div>
+          <Events />
         </div>
-        <Events onChange={handleEventsChange} />
-      </div>
-      {/* {selectedText && (
+        {/* {selectedText && (
         <div className="flex flex-col bg-yellow-100 p-2 rounded-md mt-2 text-sm">
           <strong>Selected Text:</strong> {selectedText}
           <div className="flex gap-1 mt-2">
@@ -146,7 +152,8 @@ const Creator = () => {
           </div>
         </div>
       )} */}
-    </div>
+      </div>
+    </EventsProvider>
   );
 };
 

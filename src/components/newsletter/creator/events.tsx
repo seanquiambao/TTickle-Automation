@@ -14,16 +14,15 @@ import { Popup } from "@/types/popup";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MOCK, QUESTIONS } from "@/data/newsletter/event";
+import { QUESTIONS } from "@/data/newsletter/event";
 import { ChangeEvent } from "react";
 import { EventType } from "@/types/event";
+import { useEventContext } from "./context";
 
 type props = {
   setEvent: (value: (prevEvent: EventType) => EventType) => void;
 };
-type EventsProps = {
-  onChange: (updatedEvent: EventType[]) => void;
-};
+
 const EventModal = ({ setEvent }: props) => {
   return (
     <>
@@ -57,8 +56,9 @@ const EventModal = ({ setEvent }: props) => {
   );
 };
 
-const Events = ({ onChange }: EventsProps) => {
-  const [events, setEvents] = useState<EventType[]>(MOCK || []);
+const Events = () => {
+  const { eventsContext, setEventsContext } = useEventContext();
+  const [events, setEvents] = useState<EventType[]>(eventsContext);
   const [event, setEvent] = useState<EventType>(() => ({
     name: "",
     description: "",
@@ -78,7 +78,7 @@ const Events = ({ onChange }: EventsProps) => {
     console.log("Current Event State:", event); // Debugging
     setEvents((prevEvents) => {
       const updatedEvents = [...prevEvents, event];
-      onChange(updatedEvents);
+      setEventsContext(updatedEvents);
       return updatedEvents;
     });
     setEvent({ name: "", description: "", location: "", date: "" }); // Reset form
