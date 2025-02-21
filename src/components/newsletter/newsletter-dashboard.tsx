@@ -12,7 +12,7 @@ import {
   AlertDialogDescription,
   AlertDialogHeader,
 } from "../ui/alert-dialog";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { QUESTIONS } from "@/data/newsletter/newsletter";
 import { NewsletterType } from "@/types/newsletter";
 import { HTMLInputs } from "@/types/inputs";
@@ -20,6 +20,8 @@ import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { Button } from "../ui/button";
 
 const NewsletterDashboard = () => {
+  const [newsletters, setNewsletters] = useState([]);
+
   const [popup, setPopup] = useState({
     visible: false,
   });
@@ -41,6 +43,26 @@ const NewsletterDashboard = () => {
       visible: true,
     });
   };
+
+  useEffect(() => {
+    fetch("/api/document", {
+      method: "GET",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setNewsletters(data.newsletters);
+      })
+      .catch((error) => {
+        console.error("Error fetching newsletters:", error);
+      });
+  }, []);
+
   return (
     <div className="flex flex-col w-10/12 m-10 gap-4">
       <Label className="font-extrabold text-3xl">Newsletter</Label>
@@ -50,12 +72,20 @@ const NewsletterDashboard = () => {
         <Plus size={48} className="cursor-pointer" />
         <Trash size={48} className="cursor-pointer" />
       </div>
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-3 gap-5">
         <NewsletterCard
           title="Giving Guide 2024"
           id={2}
           handleConfigure={handleConfigure}
         />
+        {newsletters.map((newsletter, index) => (
+          <NewsletterCard
+            title="hello world"
+            id={index + 2}
+            handleConfigure={handleConfigure}
+            key={index}
+          />
+        ))}
       </div>
 
       <AlertDialog open={popup.visible}>
