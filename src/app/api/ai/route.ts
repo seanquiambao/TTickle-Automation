@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest) => {
         {
           role: "system",
           content:
-            "You are an editor and you are tasked to to compile all these events into a newsletter in order to inform the user in an automated email.",
+            "You are an editor and you are tasked to compile all these events into a newsletter in order to inform the user in an automated email.",
         },
         { role: "user", content: JSON.stringify(body) },
       ],

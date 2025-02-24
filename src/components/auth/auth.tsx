@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { signInWithCustomToken } from "firebase/auth";
 import { auth as firebaseAuth } from "@/utils/firebase";
+import Loading from "../global/loading";
 
 export default function AuthProvider({
   children,
@@ -41,7 +42,7 @@ export default function AuthProvider({
 
   // While we are still syncing, show a loading spinner (or blank screen)
   if (isSyncing) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   console.log("aaa");

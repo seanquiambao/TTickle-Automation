@@ -14,8 +14,14 @@
     "components": "@/components",
     "utils": "@/utils/utils",
     "ui": "@/components/ui",
-    "lib": "@/utils",
+    "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "iconLibrary": "lucide"
+  "iconLibrary": "lucide",
+  "registries": {
+    "plate": {
+      "style": "default",
+      "url": "https://platejs.org/r"
+    }
+  }
 }
