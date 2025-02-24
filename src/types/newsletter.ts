@@ -1,4 +1,5 @@
 export type NewsletterMetadata = {
+  id: number;
   subject: string;
   status: string;
   date: Date;

@@ -1,5 +1,4 @@
 "use client";
-import { Plus, Trash } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import Select from "@/components/global/select";
@@ -19,13 +18,16 @@ import { HTMLInputs } from "@/types/inputs";
 import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { Button } from "../ui/button";
 import { MOCK } from "@/data/newsletter/newsletter";
+import Toolbar from "./toolbar";
+import { Popup } from "@/types/popup";
 
 const NewsletterDashboard = () => {
-  const [popup, setPopup] = useState({
+  const [popup, setPopup] = useState<Popup>({
     visible: false,
   });
 
   const [newsletter, setNewsletter] = useState<NewsletterMetadata[]>(MOCK);
+  const [selected, setSelected] = useState<number[]>([]);
   const handleChange = (e: ChangeEvent<HTMLInputs>, key: string) => {
     setNewsletter({ ...newsletter, [key]: e.target.value });
   };
@@ -37,30 +39,17 @@ const NewsletterDashboard = () => {
     });
   };
 
-  const handleAdd = () => {
-    setPopup({
-      ...popup,
-      visible: true,
-    });
-  };
   return (
     <div className="flex flex-col w-11/12 m-10 gap-4">
       <Label className="font-extrabold text-3xl">Newsletter</Label>
-      <div className="flex flex-row items-center gap-2">
-        <Button className="bg-ttickles-blue text-white font-bold hover:bg-ttickles-blue">
-          approve
-        </Button>
-        <Button className="bg-ttickles-orange text-white font-bold hover:bg-ttickles-orange">
-          revise
-        </Button>
-        <Button className="bg-ttickles-lightblue text-white font-bold hover:bg-ttickles-lightblue">
-          done
-        </Button>
-        <Input placeholder="search" />
-        <Select />
-        <Plus size={48} className="cursor-pointer" onClick={handleAdd} />
-        <Trash size={48} className="cursor-pointer" />
-      </div>
+      <Toolbar
+        popup={popup}
+        setPopup={setPopup}
+        newsletter={newsletter}
+        setNewsletter={setNewsletter}
+        selected={selected}
+        setSelected={setSelected}
+      />
       <div className="grid grid-cols-3 gap-4">
         {newsletter.map((item, index) => (
           <NewsletterCard
@@ -68,7 +57,9 @@ const NewsletterDashboard = () => {
             status={item.status}
             title={item.subject}
             date={item.date}
-            id={2}
+            id={item.id}
+            selected={selected}
+            setSelected={setSelected}
             handleConfigure={handleConfigure}
           />
         ))}
