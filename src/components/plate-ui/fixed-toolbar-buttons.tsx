@@ -121,9 +121,9 @@ export function FixedToolbarButtons() {
               <StrikethroughIcon />
             </MarkToolbarButton>
 
-            <MarkToolbarButton nodeType={CodePlugin.key} tooltip="Code (⌘+E)">
+            {/* <MarkToolbarButton nodeType={CodePlugin.key} tooltip="Code (⌘+E)">
               <Code2Icon />
-            </MarkToolbarButton>
+            </MarkToolbarButton> */}
 
             <ColorDropdownMenu
               nodeType={FontColorPlugin.key}
@@ -157,8 +157,8 @@ export function FixedToolbarButtons() {
 
           <ToolbarGroup>
             <MediaToolbarButton nodeType={ImagePlugin.key} />
-            <MediaToolbarButton nodeType={VideoPlugin.key} />
-            <MediaToolbarButton nodeType={AudioPlugin.key} />
+            {/* <MediaToolbarButton nodeType={VideoPlugin.key} />
+            <MediaToolbarButton nodeType={AudioPlugin.key} /> */}
             <MediaToolbarButton nodeType={FilePlugin.key} />
           </ToolbarGroup>
 

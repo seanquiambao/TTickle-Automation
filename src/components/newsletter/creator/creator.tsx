@@ -1,13 +1,21 @@
 "use client";
 
-// import { useState, useMemo, useEffect } from "react";
-// import { Textarea } from "@/components/ui/textarea";
-// import { EventType } from "@/types/event";
+import { useState, useEffect } from "react";
 import Events from "./events";
 import { PlateEditor } from "@/components/editor/plate-editor";
 import { EventsProvider } from "./context";
+import { Button } from "@/components/ui/button";
+import { Ellipsis, Loader } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 
 const Creator = () => {
+  const [data, setData] = useState<string[] | null>(null);
+  const [newsletter, setNewsletter] = useState<string>("");
+  const [error, setError] = useState(false);
+  const [loading, setIsLoading] = useState(true);
+  const pathname = usePathname();
+  const id = pathname.split("/")[4];
   // const { EventsContext } = useEventContext()
   // const [events, setEvents] = useState(EventsContext)
   // console.log("context: ", events)
@@ -15,8 +23,6 @@ const Creator = () => {
   // const [prompt, setPrompt] = useState("");
   // const [selectedPrompt, setSelectedPrompt] = useState("");
   // const [selectedText, setSelectedText] = useState("");
-  // const [error, setError] = useState(false);
-  // const [loading, setIsLoading] = useState(false);
   // const [loadingSelected, setLoadingSelected] = useState(false);
 
   // const [allEvents, setEvents] = useState<EventType[]>([]);
@@ -77,81 +83,92 @@ const Creator = () => {
   // };
 
   // const handleEventsChange = (updatedEvents: EventType[]) => {
-  //   console.log("Updated Events List in Parent:", updatedEvents);
-  //   // setEvents(updatedEvents);
-  //   // setEvents(updatedEvents)
+  // console.log("Updated Events List in Parent:", updatedEvents);
+  // setEvents(updatedEvents);
+  // setEvents(updatedEvents)
   // };
 
-  // if (error) {
-  //   console.log("Failed");
-  //   // replace with a toast
-  // }
+  useEffect(() => {
+    fetch(`/api/newsletter/${id}`, {
+      method: "GET",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        const newsletter = data.newsletter.join("\n");
+        // console.log("creator", newsletter);
+        setNewsletter(newsletter);
+      })
+      .catch((error) => {
+        console.error("Error fetching newsletters:", error);
+      })
+      .finally(() => console.log("done")); // toaast
+  }, [id]);
+
+  const generateDocument = async () => {
+    if (!data || !data.length) return;
+
+    setIsLoading(false);
+
+    try {
+      const res = await fetch(`/api/newsletter/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ document: data }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error("Error creating Document:", error);
+      setError(true);
+    } finally {
+      setIsLoading(true);
+      toast.success("Newsletter saved successfully!");
+    }
+  };
+  const handleChange = (value: string) => {
+    console.log("Updated", value);
+    setData(value.split("\n"));
+  };
+
+  if (error) {
+    console.log("Failed");
+    // replace with a toast
+  }
 
   return (
     <EventsProvider>
       <div className="flex flex-col gap-4 h-full w-full">
         <div className="font-extrabold text-3xl mb-8">Newsletter</div>
         <div className="flex flex-row h-full gap-2 w-2/3 ">
-          <div
-            // onMouseUp={() =>
-            //   setSelectedText(window.getSelection()?.toString().trim() || "")
-            // }
-            className="flex flex-col bg-black/5 p-4 rounded-md border border-black/20 w-full gap-4 h-full"
-          >
-            {/* <Textarea
-            value={displayedMessage}
-            onChange={(e) => setMessage(e.target.value)}
-            className="resize-none border-black/20 bg-white h-full"
-          /> */}
-            {/* <TypingEffect message={message} setMessage={setMessage} /> */}
-
-            <PlateEditor />
-            {/* <Prompt text={prompt} />
-          <div className="relative">
-            <Input
-              placeholder="write your prompt here"
-              className="placeholder:text-black/20 placeholder:font-bold bg-white w-11/12"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-            />
-            <Button
-              size="sm"
-              variant="search"
-              className="absolute top-0 right-0"
-              onClick={() => generateAI(prompt, false)}
-              disabled={loading}
-            >
-              {loading ? <Loader className="animate-spin" /> : <Search />}
-            </Button>
-          </div> */}
+          <div className="flex flex-col bg-black/5 p-4 rounded-md border border-black/20 w-full gap-4 h-full">
+            {newsletter ? (
+              <PlateEditor onChange={handleChange} value={newsletter} />
+            ) : (
+              <Ellipsis className="motion-preset-pulse-sm motion-duration-1000" />
+            )}
           </div>
           <Events />
         </div>
-        {/* {selectedText && (
-        <div className="flex flex-col bg-yellow-100 p-2 rounded-md mt-2 text-sm">
-          <strong>Selected Text:</strong> {selectedText}
-          <div className="flex gap-1 mt-2">
-            <Input
-              placeholder="Enter suggestion prompt"
-              value={selectedPrompt}
-              onChange={(e) => setSelectedPrompt(e.target.value)}
-              className="w-fit"
-            />
-            <Button
-              size="sm"
-              variant="search"
-              onClick={() => generateAI(selectedPrompt, true)}
-              disabled={loadingSelected}
-            >
-              {loadingSelected ? (
-                <Loader className="animate-spin" />
-              ) : (
-                <ArrowUpNarrowWide />
-              )}
-            </Button>
-          </div>
-        </div>
-      )} */}
+        {loading ? (
+          <Button
+            disabled={!data || !data.length}
+            onClick={generateDocument}
+            className="bg-ttickles-darkblue text-white px-4 py-2 rounded disabled:opacity-50 w-fit"
+          >
+            Save
+          </Button>
+        ) : (
+          <Loader className="animate-spin" />
+        )}
       </div>
     </EventsProvider>
   );

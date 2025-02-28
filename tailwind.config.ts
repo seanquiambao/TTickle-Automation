@@ -16,6 +16,7 @@ export default {
           lightblue: "#83c5be",
           white: "#edf6f9",
           gray: "#7e8287",
+          orange: "#ff9f1c",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

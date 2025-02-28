@@ -98,7 +98,7 @@ import { SlashInputElement } from "@/components/plate-ui/slash-input-element";
 import { TocElement } from "@/components/plate-ui/toc-element";
 import { ToggleElement } from "@/components/plate-ui/toggle-element";
 
-export const useCreateEditor = () => {
+export const useCreateEditor = ({ value }: { value: string }) => {
   return usePlateEditor({
     override: {
       components: withPlaceholders({
@@ -156,21 +156,21 @@ export const useCreateEditor = () => {
       FixedToolbarPlugin,
       FloatingToolbarPlugin,
     ],
-    // value: [
-    //   {
-    //     children: [{ text: "Playground" }],
-    //     type: "h1",
-    //   },
-    //   {
-    //     children: [
-    //       { text: "A rich-text editor with AI capabilities. Try the " },
-    //       { bold: true, text: "AI commands" },
-    //       { text: " or use " },
-    //       { kbd: true, text: "Cmd+J" },
-    //       { text: " to open the AI menu." },
-    //     ],
-    //     type: ParagraphPlugin.key,
-    //   },
-    // ],
+    value: [
+      {
+        children: [{ text: value }],
+        type: ParagraphPlugin.key,
+      },
+      // {
+      //   children: [
+      //     { text: "A rich-text editor with AI capabilities. Try the " },
+      //     { bold: true, text: "AI commands" },
+      //     { text: " or use " },
+      //     { kbd: true, text: "Cmd+J" },
+      //     { text: " to open the AI menu." },
+      //   ],
+      //   type: ParagraphPlugin.key,
+      // },
+    ],
   });
 };

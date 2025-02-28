@@ -7,15 +7,26 @@ import {
   SelectItem,
 } from "../ui/select";
 
-const Select = () => {
+interface SelectProps {
+  options: { label: string; value: string }[];
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
+
+const Select = ({ options, onChange, placeholder = "Select" }: SelectProps) => {
   return (
-    <SelectShadCN>
+    <SelectShadCN onValueChange={onChange}>
       <SelectTrigger>
-        <SelectValue placeholder="filter" />
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className="bg-white">
         <SelectGroup>
-          <SelectItem value="apple">Apple</SelectItem>
+          <SelectItem value="All">All</SelectItem>
+          {options.map(({ value, label }, index) => (
+            <SelectItem key={index} value={value}>
+              {label}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </SelectShadCN>
