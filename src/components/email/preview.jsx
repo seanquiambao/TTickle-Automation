@@ -17,12 +17,12 @@ export const ModernBusinessPreview = (props) => {
             {props.mainArticleContent.substring(0, 100)}...
           </p>
           <div className="mt-3">
-            <a
-              href={props.mainArticleLink}
+            <button
+              // href={props.mainArticleLink}
               className="bg-blue-600 text-white text-sm px-4 py-2 rounded inline-block"
             >
               Read More
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -30,9 +30,7 @@ export const ModernBusinessPreview = (props) => {
       <div className="bg-gray-100 p-4 text-center">
         <p className="text-xs text-gray-500">{props.footerText}</p>
         <p className="text-xs text-gray-400 mt-2">
-          <a href={props.unsubscribeLink} className="text-blue-600 underline">
-            Unsubscribe
-          </a>
+          <button className="text-blue-600 underline">Unsubscribe</button>
         </p>
       </div>
     </div>
@@ -57,12 +55,12 @@ export const MinimalistPreview = (props) => {
             {props.mainArticleContent.substring(0, 100)}...
           </p>
           <div className="mt-3">
-            <a
-              href={props.mainArticleLink}
+            <button
+              // href={props.mainArticleLink}
               className="border border-gray-300 text-gray-700 text-sm px-4 py-2 rounded inline-block"
             >
               Read More
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -70,9 +68,7 @@ export const MinimalistPreview = (props) => {
       <div className="p-4 text-center">
         <p className="text-xs text-gray-500">{props.footerText}</p>
         <p className="text-xs text-gray-400 mt-2">
-          <a href={props.unsubscribeLink} className="text-gray-500 underline">
-            Unsubscribe
-          </a>
+          <button className="text-gray-500 underline">Unsubscribe</button>
         </p>
       </div>
     </div>
@@ -102,12 +98,12 @@ export const VibrantPreview = (props) => {
             {props.mainArticleContent.substring(0, 100)}...
           </p>
           <div className="mt-3">
-            <a
-              href={props.mainArticleLink}
+            <button
+              // href={props.mainArticleLink}
               className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm px-4 py-2 rounded inline-block"
             >
               Read More
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -116,9 +112,7 @@ export const VibrantPreview = (props) => {
       <div className="bg-gray-100 p-4 text-center">
         <p className="text-xs text-gray-500">{props.footerText}</p>
         <p className="text-xs text-gray-400 mt-2">
-          <a href={props.unsubscribeLink} className="text-purple-600 underline">
-            Unsubscribe
-          </a>
+          <button className="text-purple-600 underline">Unsubscribe</button>
         </p>
       </div>
     </div>
@@ -143,12 +137,12 @@ export const CorporatePreview = (props) => {
             {props.mainArticleContent.substring(0, 100)}...
           </p>
           <div className="mt-3">
-            <a
-              href={props.mainArticleLink}
+            <button
+              // href={props.mainArticleLink}
               className="bg-gray-800 text-white text-sm px-4 py-2 rounded inline-block"
             >
               Read More
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -156,9 +150,7 @@ export const CorporatePreview = (props) => {
       <div className="bg-gray-100 p-4 text-center">
         <p className="text-xs text-gray-500">{props.footerText}</p>
         <p className="text-xs text-gray-400 mt-2">
-          <a href={props.unsubscribeLink} className="text-gray-600 underline">
-            Unsubscribe
-          </a>
+          <button className="text-gray-600 underline">Unsubscribe</button>
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { getServerSession } from "next-auth";
 import { headers } from "next/headers";
-import SignIn from "./auth/redirect";
+import SignIn from "@/utils/signIn";
 import { options } from "@/utils/auth";
 import { Role } from "@/data/types";
 import { redirect } from "next/navigation";

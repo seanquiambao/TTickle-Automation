@@ -1,14 +1,14 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOllama } from "ollama-ai-provider";
-
+import { env } from "./env";
 const genAI = createGoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY as string,
+  apiKey: env.GEMINI_API_KEY as string,
 });
 const geminiModel = "gemini-2.0-flash";
 
 const ollama = createOllama({
   /* your config */
-  baseURL: process.env.OLLAMA_URL || "http://localhost:11434",
+  baseURL: env.OLLAMA_URL || "http://localhost:11434",
 });
 const ollamaModel = "llama3.2";
 
