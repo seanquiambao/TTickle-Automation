@@ -6,6 +6,9 @@ import { getServerSession } from "next-auth/next";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 import { env } from "./env";
 
+import { betterAuth } from "better-auth";
+import { organization } from "better-auth/plugins";
+
 export const options: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -70,3 +73,31 @@ export const authenticate = async (): Promise<AuthenticateProps> => {
 export const getSession = async () => {
   return await getServerSession(options);
 };
+
+export const auth = betterAuth({
+  database: FirestoreAdapter({
+    credential: cert({
+      projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      clientEmail: env.NEXT_PRIVATE_FIREBASE_CLIENT_EMAIL,
+      privateKey: env.NEXT_PRIVATE_FIREBASE_PRIVATE_KEY,
+    }),
+  }),
+
+  socialProviders: {
+    google: {
+      mapProfileToUser: (profile) => ({
+        id: profile.sub,
+        uuid: crypto.randomUUID(),
+        email: profile.email,
+        name: profile.name,
+        role: "User",
+        image: profile.picture,
+        orgId: "",
+      }),
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+  },
+  plugins: [organization()],
+  baseURL: process.env.BETTER_AUTH_URL as string,
+});
