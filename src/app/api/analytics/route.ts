@@ -1,11 +1,12 @@
+import { env } from "@/utils/env";
 export const GET = async () => {
   try {
     const response = await fetch(
-      `https://us.posthog.com/api/projects/${process.env.PROJECT_ID}/insights/trend/`,
+      `https://us.posthog.com/api/projects/${env.PROJECT_ID}/insights/trend/`,
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.POSTHOG_API_KEY}`,
+          Authorization: `Bearer ${env.POSTHOG_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
