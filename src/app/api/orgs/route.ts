@@ -1,8 +1,9 @@
+import { authenticate } from "@/app/(auth)/actions";
 import { Organization } from "@/data/types";
-import { options } from "@/utils/auth";
+// import { options } from "@/utils/auth";
 import { createOrg, getOrg } from "@/utils/repository/orgRepository";
 import { getUser, updateUser } from "@/utils/repository/userRepository";
-import { getServerSession } from "next-auth";
+// import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 type Mode = "join" | "create";
@@ -14,14 +15,24 @@ type Props = {
 };
 
 export const GET = async () => {
-  const session = await getServerSession(options);
-  if (!session) {
+  // const session = await getServerSession(options);
+  // if (!session) {
+  //   return NextResponse.json(
+  //     { message: "You are not authorized to access the Groups API." },
+  //     { status: 403 },
+  //   );
+  // }
+
+  const { uid, auth, message } = await authenticate();
+  if (!uid || auth !== 200) {
     return NextResponse.json(
-      { message: "You are not authorized to access the Groups API." },
-      { status: 403 },
+      {
+        message: message,
+      },
+      { status: auth },
     );
   }
-  const result = await getUser(session.user.id);
+  const result = await getUser(uid);
   if (!result) {
     return NextResponse.json(
       {
@@ -39,13 +50,16 @@ export const GET = async () => {
 };
 
 export const POST = async (request: NextRequest) => {
-  const session = await getServerSession(options);
-  if (!session) {
+  const { uid, message, auth } = await authenticate();
+  if (!uid || auth !== 200) {
     return NextResponse.json(
-      { message: "You are not authorized to access the Groups API." },
-      { status: 403 },
+      {
+        message: message,
+      },
+      { status: auth },
     );
   }
+
   if (
     request.headers.get("Content-Type")?.toLowerCase() != "application/json"
   ) {
@@ -80,7 +94,7 @@ export const POST = async (request: NextRequest) => {
       );
     }
     await updateUser({
-      ...session.user,
+      uid,
       orgId: data.orgId!,
     });
     return NextResponse.json(
@@ -90,7 +104,7 @@ export const POST = async (request: NextRequest) => {
   } else if (data.mode === "create") {
     const result = await createOrg(data.org!);
     await updateUser({
-      ...session.user,
+      uid,
       orgId: data.org!.id,
     });
 

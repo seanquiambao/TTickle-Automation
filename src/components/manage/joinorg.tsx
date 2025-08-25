@@ -6,14 +6,19 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Organization } from "@/data/types";
 import { Bounce, toast } from "react-toastify";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
+import { authenticate } from "@/app/(auth)/actions";
 
 const OrganizationForm = () => {
   const [orgID, setOrgID] = useState("");
   const [orgName, setOrgName] = useState("");
   const [activeTab, setActiveTab] = useState("join");
 
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const getUID = async () => {
+    const { uid } = await authenticate();
+    return uid;
+  };
 
   const joinOrg = () => {
     fetch(`/api/orgs/${orgID}?data=false`).then((resp) => {
@@ -66,7 +71,7 @@ const OrganizationForm = () => {
     });
   };
 
-  const createOrg = () => {
+  const createOrg = async () => {
     fetch("/api/orgs", {
       body: JSON.stringify({
         org: {
@@ -83,7 +88,7 @@ const OrganizationForm = () => {
           users: [],
           groups: [],
           region: "US",
-          owner: session?.user.uuid,
+          owner: await getUID(),
           calendarId: "",
         } as Organization,
         mode: "create",

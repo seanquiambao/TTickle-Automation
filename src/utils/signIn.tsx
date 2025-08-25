@@ -1,7 +1,8 @@
 "use client";
 import { signIn } from "next-auth/react";
-import { signInWithPopup } from "firebase/auth";
+import { getIdToken, signInWithPopup } from "firebase/auth";
 import { auth, providers } from "./firebase";
+import { createSessionFromIdToken } from "@/app/(auth)/actions";
 
 interface Props {
   callback: string;
@@ -14,5 +15,10 @@ export default SignIn;
 
 export const signInProviders = async (name: "google" | "facebook") => {
   const provider = providers[name];
-  return signInWithPopup(auth, provider);
+  const { user } = await signInWithPopup(auth, provider);
+  console.log(user);
+  const idToken = await getIdToken(user, true);
+  await createSessionFromIdToken(idToken);
+
+  return { success: true, uid: user.uid };
 };

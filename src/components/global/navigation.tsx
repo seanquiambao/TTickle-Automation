@@ -22,8 +22,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../ui/collapsible";
-import { signOut } from "next-auth/react";
+// import { signOut } from "next-auth/react";
 import { LogIn } from "lucide-react";
+import { serverSignOut } from "@/app/(auth)/actions";
+import { auth } from "@/utils/firebase";
 
 const Navigation = () => {
   const path = usePathname().split("/");
@@ -134,7 +136,12 @@ const Navigation = () => {
           {open && <span className="ml-2 ">Close Sidebar</span>}
         </span>
         <span
-          onClick={() => signOut({ callbackUrl: "/", redirect: true })}
+          onClick={async () => {
+            await auth.signOut();
+            const { success } = await serverSignOut();
+            if (success) router.push("/login");
+          }}
+          // onClick={() => signOut({ callbackUrl: "/", redirect: true })}
           className={`${open ? "h-7 pl-3" : "mx-auto h-6"} flex items-center text-lg hover:cursor-pointer`}
         >
           <span className={`${!open && "mx-auto"}`}>

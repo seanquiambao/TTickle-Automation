@@ -34,6 +34,7 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    DOMAIN_URL: z.string().optional(),
   },
 
   /**
@@ -121,6 +122,7 @@ export const env = createEnv({
 
     // Environment
     NODE_ENV: process.env.NODE_ENV,
+    DOMAIN_URL: process.env.DOMAIN_URL,
   },
 
   /**

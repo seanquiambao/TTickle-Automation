@@ -1,5 +1,5 @@
 import Navigation from "@/components/global/navigation";
-import ProtectedPage from "@/components/protected";
+// import ProtectedPage from "@/components/protected";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Metadata } from "next";
 
@@ -14,12 +14,12 @@ type LayoutProps = {
 const Layout = async ({ children }: LayoutProps) => {
   return (
     <div>
-      <ProtectedPage>
-        <SidebarProvider>
-          <Navigation />
-          {children}
-        </SidebarProvider>
-      </ProtectedPage>
+      {/* <ProtectedPage> */}
+      <SidebarProvider>
+        <Navigation />
+        {children}
+      </SidebarProvider>
+      {/* </ProtectedPage> */}
     </div>
   );
 };

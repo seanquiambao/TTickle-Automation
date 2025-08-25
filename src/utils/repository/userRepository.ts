@@ -10,8 +10,16 @@ export const getUser = async (
   return result.data() as unknown as UserMetadata;
 };
 
-export const updateUser = async (metadata: UserMetadata) => {
-  if (!(await getUser(metadata.id))) return false;
-  await updateDoc(doc(collection(db, "users"), metadata.id), { ...metadata });
+type props = {
+  uid: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  orgId?: string;
+};
+
+export const updateUser = async (metadata: props) => {
+  if (!(await getUser(metadata.uid))) return false;
+  await updateDoc(doc(collection(db, "users"), metadata.uid), { ...metadata });
   return true;
 };

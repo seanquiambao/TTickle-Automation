@@ -31,7 +31,14 @@ export const POST = async (request: NextRequest) => {
     );
   }
 
-  const result = await updateUser(data);
+  const { uid } = session.user as User & { uid: string; orgId?: string };
+  const result = await updateUser({
+    uid,
+    name: data.name,
+    email: data.email,
+    image: data.image,
+    orgId: data.orgId,
+  });
   return NextResponse.json(
     { message: result ?? "Unable to update your user data." },
     { status: result ? 200 : 400 },

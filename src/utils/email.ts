@@ -50,3 +50,19 @@ export const sendEmail = async (
     html: emailHtml,
   });
 };
+
+type emailProps = {
+  to: string;
+  subject: string;
+  html: string;
+};
+
+export const sendFirebaseEmail = async ({ to, subject, html }: emailProps) => {
+  const fromLine = env.NEXT_PUBLIC_SMTP_FROM ?? "no-reply";
+  return await transporter.sendMail({
+    from: fromLine,
+    to: to,
+    subject: subject,
+    html: html,
+  });
+};

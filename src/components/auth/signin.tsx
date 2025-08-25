@@ -7,15 +7,25 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, Loader2, Facebook } from "lucide-react";
-import { signInAction } from "@/app/(auth)/actions";
+import { authenticate, createSessionFromIdToken } from "@/app/(auth)/actions";
 import { signInProviders } from "@/utils/signIn";
-import { toast } from "sonner";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/utils/firebase";
+import { useRouter } from "next/navigation";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const validateForm = () => {
+    const emailTrimmed = email.trim();
+    const passwordTrimmed = password.trim();
+
+    return emailTrimmed.length > 0 && passwordTrimmed.length > 0;
+  };
 
   return (
     <div className="flex min-h-screen items-start justify-center bg-ttickles-white p-6 sm:p-10">
@@ -45,12 +55,29 @@ const SignIn = () => {
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
-                const formData = new FormData();
-                formData.append("email", email.trim());
-                formData.append("password", password);
+                console.log(email, password);
+                if (typeof email !== "string" || typeof password !== "string") {
+                  throw new Error("Email or password is missing or invalid.");
+                }
+                const isValid = validateForm();
+                if (!isValid) return;
+
+                const { user } = await signInWithEmailAndPassword(
+                  auth,
+                  email,
+                  password,
+                );
+                console.log("FORMS:", user);
+                const idToken = await user.getIdToken(true);
+                console.log(idToken);
+                if (!idToken) {
+                  throw new Error("No ID token found.");
+                }
                 startTransition(async () => {
-                  await signInAction(formData);
-                  toast.success("Signed in successfully!");
+                  await createSessionFromIdToken(idToken);
+                  if (user) {
+                    router.push("/user");
+                  }
                 });
               }}
               className="space-y-4"
@@ -130,12 +157,14 @@ const SignIn = () => {
                 </div>
               </div>
 
-              {/* Providers */}
               <div className="grid grid-cols-2 gap-3">
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => signInProviders("google")}
+                  onClick={async () => {
+                    const { success } = await signInProviders("google");
+                    if (success) router.push("/user");
+                  }}
                   className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
                 >
                   <Image
@@ -150,11 +179,23 @@ const SignIn = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => signInProviders("facebook")}
+                  onClick={async () => {
+                    const { success } = await signInProviders("facebook");
+                    if (success) router.push("/user");
+                  }}
                   className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
                 >
                   <Facebook className="h-4 w-4" />
                   <span>Facebook</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={async () => console.log(await authenticate())}
+                  className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
+                >
+                  <Facebook className="h-4 w-4" />
+                  <span>Auth</span>
                 </Button>
               </div>
             </form>
