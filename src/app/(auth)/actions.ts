@@ -137,17 +137,22 @@ export const authenticate = async () => {
 
 export const getSession = async () => {
   const sessionCookie = await getSessionCookie();
-  const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
-  if (!decoded?.uid) return null;
+  if (!sessionCookie) return null;
+  try {
+    const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
+    if (!decoded?.uid) return null;
 
-  const userRecord = await adminAuth.getUser(decoded.uid);
-  return {
-    uid: decoded.uid,
-    email: decoded.email,
-    name: decoded.name,
-    image: decoded.picture,
-    orgId: userRecord.customClaims?.orgId ?? null,
-    siteRole: userRecord.customClaims?.siteRole ?? "user",
-    orgRole: userRecord.customClaims?.orgRole ?? null,
-  };
+    const userRecord = await adminAuth.getUser(decoded.uid);
+    return {
+      uid: decoded.uid,
+      email: decoded.email,
+      name: decoded.name,
+      image: decoded.picture,
+      orgId: userRecord.customClaims?.orgId ?? null,
+      siteRole: userRecord.customClaims?.siteRole ?? "user",
+      orgRole: userRecord.customClaims?.orgRole ?? null,
+    };
+  } catch {
+    return null;
+  }
 };

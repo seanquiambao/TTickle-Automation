@@ -96,6 +96,7 @@ export const POST = async (request: NextRequest) => {
     await updateUser({
       uid,
       orgId: data.orgId!,
+      role: { orgRole: "member" },
     });
     return NextResponse.json(
       { message: "Succesfully joined the organization." },
@@ -106,6 +107,7 @@ export const POST = async (request: NextRequest) => {
     await updateUser({
       uid,
       orgId: data.org!.id,
+      role: { orgRole: "owner" },
     });
 
     return NextResponse.json(

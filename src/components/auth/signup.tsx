@@ -6,13 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, EyeOff, Mail, Lock, Loader2, Facebook } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, Loader2, User } from "lucide-react";
 import { createSessionFromIdToken } from "@/app/(auth)/actions";
 import { signInProviders } from "@/utils/signIn";
-import {
-  createUserWithEmailAndPassword,
-  //   sendEmailVerification,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
 import { authErrorMessage } from "@/utils/firebase-error";
@@ -20,6 +17,8 @@ import { authErrorMessage } from "@/utils/firebase-error";
 const SignUp = () => {
   const router = useRouter();
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -31,12 +30,24 @@ const SignUp = () => {
   const [formError, setFormError] = useState<string | null>(null);
 
   const validate = () => {
+    const fn = firstName.trim();
+    const ln = lastName.trim();
     const e = email.trim();
     const p = password.trim();
     const c = confirm.trim();
 
-    if (!e || !p || !c) {
+    if (!fn || !ln || !e || !p || !c) {
       setFormError("All fields are required.");
+      return false;
+    }
+
+    const nameOk =
+      /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{1,50}$/.test(fn) &&
+      /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{1,50}$/.test(ln);
+    if (!nameOk) {
+      setFormError(
+        "Names can only include letters, spaces, hyphens, and apostrophes.",
+      );
       return false;
     }
     if (p.length < 8) {
@@ -62,9 +73,14 @@ const SignUp = () => {
         email,
         password,
       );
-      //   try {
-      //     await sendEmailVerification(user);
-      //   } catch (_) {}
+
+      const fullName = `${firstName.trim()} ${lastName.trim()}`.replace(
+        /\s+/g,
+        " ",
+      );
+      await updateProfile(user, { displayName: fullName });
+
+      // try { await sendEmailVerification(user); } catch {}
 
       const idToken = await user.getIdToken(true);
       await createSessionFromIdToken(idToken);
@@ -93,7 +109,7 @@ const SignUp = () => {
 
         <Card className="border border-gray-100 shadow-sm transition-shadow duration-300 hover:shadow-md">
           <CardHeader>
-            <CardTitle className="text-center text-2xl leading-6font-bold text-ttickles-blue">
+            <CardTitle className="text-center text-2xl leading-6 font-bold text-ttickles-blue">
               Create an account
             </CardTitle>
             <p className="mt-1 text-center text-sm text-muted-foreground">
@@ -103,6 +119,31 @@ const SignUp = () => {
 
           <CardContent>
             <form onSubmit={onSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <div className="relative">
+                  <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Input
+                    placeholder="First name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    autoComplete="given-name"
+                    required
+                    className="pl-10 bg-ttickles-white text-black border border-ttickles-lightblue/60 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
+                  />
+                </div>
+                <div className="relative">
+                  <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Input
+                    placeholder="Last name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    autoComplete="family-name"
+                    required
+                    className="pl-10 bg-ttickles-white text-black border border-ttickles-lightblue/60 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
+                  />
+                </div>
+              </div>
+
               <div className="relative">
                 <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <Input
@@ -216,6 +257,7 @@ const SignUp = () => {
                 <Button
                   type="button"
                   variant="outline"
+                  disabled={loading}
                   onClick={async () => {
                     const { success } = await signInProviders("google");
                     if (success) router.push("/user");
@@ -234,13 +276,19 @@ const SignUp = () => {
                 <Button
                   type="button"
                   variant="outline"
+                  disabled={loading}
                   onClick={async () => {
                     const { success } = await signInProviders("facebook");
                     if (success) router.push("/user");
                   }}
                   className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
                 >
-                  <Facebook className="h-4 w-4" />
+                  <Image
+                    src="https://www.svgrepo.com/show/475647/facebook-color.svg"
+                    alt="Facebook"
+                    width={18}
+                    height={18}
+                  />
                   <span>Facebook</span>
                 </Button>
               </div>

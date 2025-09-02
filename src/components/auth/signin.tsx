@@ -205,21 +205,61 @@ const SignIn = () => {
                   }}
                   className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
                 >
-                  <Facebook className="h-4 w-4" />
+                  <Image
+                    src="https://www.svgrepo.com/show/475647/facebook-color.svg"
+                    alt="Facebook"
+                    width={18}
+                    height={18}
+                  />
                   <span>Facebook</span>
                 </Button>
 
                 {process.env.NODE_ENV === "development" && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={loading}
-                    onClick={async () => console.log(await authenticate())}
-                    className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
-                  >
-                    <Facebook className="h-4 w-4" />
-                    <span>Auth</span>
-                  </Button>
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={loading}
+                      onClick={async () => console.log(await authenticate())}
+                      className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
+                    >
+                      <Facebook className="h-4 w-4" />
+                      <span>Auth</span>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={loading}
+                      onClick={async () => {
+                        const u = auth.currentUser;
+                        if (!u) return null;
+                        const res = await u.getIdTokenResult(true);
+                        const { siteRole, orgId, orgRole } = res.claims as {
+                          siteRole?: string;
+                          orgId?: string;
+                          orgRole?: string;
+                        };
+                        const exists =
+                          Object.prototype.hasOwnProperty.call(
+                            res.claims,
+                            "siteRole",
+                          ) &&
+                          Object.prototype.hasOwnProperty.call(
+                            res.claims,
+                            "orgId",
+                          ) &&
+                          Object.prototype.hasOwnProperty.call(
+                            res.claims,
+                            "orgRole",
+                          );
+                        console.log({ exists, siteRole, orgId, orgRole });
+                      }}
+                      className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
+                    >
+                      <Facebook className="h-4 w-4" />
+                      <span>Claims</span>
+                    </Button>
+                  </>
                 )}
               </div>
             </form>
