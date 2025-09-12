@@ -35,4 +35,17 @@ export const register = async () => {
 
   await sdk.start();
   console.log(`✅ OpenTelemetry started; exporting to ${otlpEndpoint}`);
+
+  const shutdown = async (signal: string) => {
+    try {
+      await sdk?.shutdown();
+      console.log(`🛑 OpenTelemetry shut down on ${signal}`);
+    } catch (err) {
+      console.error("Error during OTel shutdown", err);
+    } finally {
+      process.exit(0);
+    }
+  };
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
 };
