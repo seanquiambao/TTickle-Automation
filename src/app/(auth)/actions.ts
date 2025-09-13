@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { adminAuth, adminDb } from "@/utils/admin";
 import { sendFirebaseEmail } from "@/utils/email";
 import { env } from "@/utils/env";
+import { auth } from "@/utils/firebase";
 
 const SESSION_COOKIE = "ttickle_session";
 const SESSION_DAYS = 7;
@@ -155,4 +156,9 @@ export const getSession = async () => {
   } catch {
     return null;
   }
+};
+
+export const getToken = async (forceRefresh = false) => {
+  const u = auth.currentUser;
+  return u ? await u.getIdToken(forceRefresh) : null;
 };

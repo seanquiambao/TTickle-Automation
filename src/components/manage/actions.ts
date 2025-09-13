@@ -5,11 +5,6 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 
 export const getUsersbyOrgId = async (orgId: string | string[]) => {
-  const session = await getServerSession(options);
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
-
   try {
     const q = query(collection(db, "users"), where("orgId", "==", orgId));
     const querySnapshot = await getDocs(q);

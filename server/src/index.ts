@@ -1,5 +1,11 @@
 import dotenv from "dotenv";
-import express, { Express, Request, Response, json } from "express";
+import express, {
+  Express,
+  NextFunction,
+  Request,
+  Response,
+  json,
+} from "express";
 import {
   collection,
   doc,
@@ -20,6 +26,19 @@ dotenv.config({
 });
 const app: Express = express();
 app.use(json());
+
+app.get("/me", (req, res) => {
+  const u = (req as any).user as any;
+  res.json({
+    uid: u.uid,
+    email: u.email,
+    name: u.name,
+    picture: u.picture,
+    siteRole: u.siteRole ?? "user",
+    orgId: u.orgId ?? null,
+    orgRole: u.orgRole ?? null,
+  });
+});
 
 const port = 3001;
 

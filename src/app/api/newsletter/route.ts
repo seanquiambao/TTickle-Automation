@@ -1,3 +1,4 @@
+import { getSession } from "@/app/(auth)/actions";
 import { options } from "@/utils/auth";
 import { db } from "@/utils/firebase";
 import {
@@ -14,15 +15,18 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
-  const session = await getServerSession(options);
-  if (!session) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
+  // const session = await getServerSession(options);
+  // if (!session) {
+  //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  // }
+
+  const session = await getSession();
+  console.log(session);
 
   try {
     const q = query(
       collection(db, "newsletters"),
-      where("orgId", "==", session.user.orgId),
+      where("orgId", "==", session.orgId),
     );
     const querySnapshot = await getDocs(q);
 

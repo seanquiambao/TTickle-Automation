@@ -25,6 +25,7 @@ import {
   authenticate,
   createSessionFromIdToken,
   getSession,
+  getToken,
 } from "@/app/(auth)/actions";
 import Loading from "@/components/global/loading";
 
@@ -378,6 +379,26 @@ const Profile = () => {
             >
               <ScrollIcon className="h-4 w-4" />
               <span>Claims</span>
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={loading}
+              onClick={async () => {
+                const token = await getToken();
+                const res = await fetch("http://localhost:3001/api/image", {
+                  method: "GET",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                });
+                const data = await res.json();
+                console.log(data);
+              }}
+              className="w-full justify-center gap-2 border-gray-200 bg-white hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#5047a3]"
+            >
+              <EthernetPort className="h-4 w-4" />
+              <span>JWT Verify</span>
             </Button>
           </>
         )}

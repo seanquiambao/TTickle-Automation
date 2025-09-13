@@ -1,4 +1,4 @@
-import { authenticate } from "@/app/(auth)/actions";
+import { authenticate, getSession } from "@/app/(auth)/actions";
 import { Organization } from "@/data/types";
 // import { options } from "@/utils/auth";
 import { createOrg, getOrg } from "@/utils/repository/orgRepository";
@@ -23,16 +23,18 @@ export const GET = async () => {
   //   );
   // }
 
-  const { uid, auth, message } = await authenticate();
-  if (!uid || auth !== 200) {
-    return NextResponse.json(
-      {
-        message: message,
-      },
-      { status: auth },
-    );
-  }
-  const result = await getUser(uid);
+  // const { uid, auth, message } = await authenticate();
+  // if (!uid || auth !== 200) {
+  //   return NextResponse.json(
+  //     {
+  //       message: message,
+  //     },
+  //     { status: auth },
+  //   );
+  // }
+  const session = await getSession();
+
+  const result = await getUser(session.uid);
   if (!result) {
     return NextResponse.json(
       {

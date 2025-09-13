@@ -16,23 +16,23 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 const Layout = async ({ children }: LayoutProps) => {
-  const session = await getServerSession(options);
-  const header = await headers();
-  const path = header.get("x-url") || "";
-  if (!session?.user.orgId || session?.user.orgId === "") {
-    redirect("/user");
-  }
-  if (path === "/orgs" || path.startsWith("/orgs/@mine")) {
-    redirect(path.replace("@mine", session.user.orgId));
-  }
+  // const session = await getServerSession(options);
+  // const header = await headers();
+  // const path = header.get("x-url") || "";
+  // if (!session?.user.orgId || session?.user.orgId === "") {
+  //   redirect("/user");
+  // }
+  // if (path === "/orgs" || path.startsWith("/orgs/@mine")) {
+  //   redirect(path.replace("@mine", session.user.orgId));
+  // }
   return (
     <div>
-      <ProtectedPage>
-        <SidebarProvider>
-          <Navigation />
-          {children}
-        </SidebarProvider>
-      </ProtectedPage>
+      {/* <ProtectedPage> */}
+      <SidebarProvider>
+        <Navigation />
+        {children}
+      </SidebarProvider>
+      {/* </ProtectedPage> */}
     </div>
   );
 };

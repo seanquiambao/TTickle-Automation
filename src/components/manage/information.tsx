@@ -15,7 +15,9 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role: {
+    orgRole: string;
+  };
 }
 
 type Props = {
@@ -91,7 +93,7 @@ const Information = ({ orgId, orgData, users = [] }: Props) => {
 
   const getRoleColor = (role: string) => {
     switch (role.toLowerCase()) {
-      case "admin":
+      case "owner":
         return "bg-red-100 text-red-800";
       case "moderator":
         return "bg-blue-100 text-blue-800";
@@ -269,10 +271,10 @@ const Information = ({ orgId, orgData, users = [] }: Props) => {
                     </div>
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleColor(
-                        role,
+                        role.orgRole,
                       )}`}
                     >
-                      {role}
+                      {role.orgRole}
                     </span>
                   </div>
                 ))}
